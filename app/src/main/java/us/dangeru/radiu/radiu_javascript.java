@@ -15,7 +15,6 @@ public class radiu_javascript {
     NotificationCompat.Builder mBuilder;
     int mNotificationId;
     NotificationManager mNotificationManager;
-    MediaPlayer mMediaPlayer;
 
     /** Instantiate the interface and set the context */
     radiu_javascript(Context c) {
@@ -52,11 +51,17 @@ public class radiu_javascript {
      */
     @JavascriptInterface
     public void play_stream() {
-        mMediaPlayer.start();
+        radiu_application.player.start();
+        radiu_application.playing = false;
     }
 
     @JavascriptInterface
     public void pause_stream() {
-        mMediaPlayer.pause();
+        radiu_application.player.stop();
+        radiu_application.playing = false;
+    }
+    @JavascriptInterface
+    public String is_playing() {
+        return String.valueOf(radiu_application.playing);
     }
 }

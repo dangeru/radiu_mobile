@@ -43,7 +43,7 @@ function togglePlayer() {
   }
 }
 function switchPlayerState() {
-  if (document.getElementById('track').duration > 0 && !document.getElementById('track').paused) {
+  if (radiu.is_playing().toUpperCase() == "TRUE") {
     document.getElementById('is-playing').innerHTML = "play.exe";
     radiu.pause_stream();
   } else {
