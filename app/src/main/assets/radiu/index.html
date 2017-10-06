@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <script src="static/js/jquery.js"></script>
+    <script src="static/js/jquery-ui.min.js"></script>
+    <script src="static/js/app.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/radiu.css" />
+		<link href="static/etc/favicon.ico" rel="icon" type="image/x-icon" />
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta property="og:title" content="radi/u/" />
+		<meta property="og:description" content="24/7 aesthetical radiostation focused primarly on Chiptune and Vaporwave! From danger/u/ for danger/u/" />
+		<meta property="og:url" content="http://radio.dangeru.us/" />
+		<meta property="og:image" content="http://radio.dangeru.us/static/etc/temp.png" />
+    <title>radi/u/</title>
+  </head>
+  <body>
+    <img id="border-left" src="static/image/border-left.png">
+    <img id="border-right" src="static/image/border-right.png">
+    <video autoplay muted loop>
+      <source src="static/mp4/tumblr_nk8lr1LlAq1s0hk4xo1_500.mp4" type="video/mp4">
+      Sadly, your browser does not support MP4 files.
+    </video>
+		<div id="barcontent">
+    	<img id="bar" src="static/image/bar.png">
+			<img id="bar_heading" src="static/image/tag_bar.png">
+			<img id="bar_buttons" src="static/image/buttons_bar.png">
+		</div>
+    <div id="player">
+       <div id="player_inside">
+         <img src="static/image/general_icon.png"> <span id="track-title" class="tag">null</span><br>
+         <div id="control" onClick="switchPlayerState();"><img src="static/image/app_icon.png" id="player_icon"> <span id="is-playing" class="tag">play.exe</span></div>
+         <img src="static/image/folder_icon.png"> <span id="listeners" class="tag">listening_0.rtf</span><br>
+				 <img src="static/image/volume_icon.png"><input id="vol_slider" name="vol_slider" type="range" min="0" max="100"><br><br>
+       </div>
+    </div>
+		<div id="footercontent">
+    	<img id="footer" src="static/image/footer.png">
+			<img id="footer_ending" src="static/image/footer_ending.png">
+		</div>
+    <img id="icon" src="static/image/icon.png" onClick="togglePlayer();">
+  </body>
+</html>

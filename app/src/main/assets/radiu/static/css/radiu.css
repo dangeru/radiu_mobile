@@ -1,0 +1,194 @@
+@font-face {
+  font-family: 'CyberpunkWaifus';
+  src: url('CyberpunkWaifus.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  font-family: 'CyberpunkWaifus';
+}
+html, body {
+   margin: 0;
+   padding: 0;
+}
+body {
+  background-color: #008080;
+  position: relative;
+  overflow: hidden;
+}
+#logo {
+  max-width: 395px;
+  width: auto;
+}
+.tag {
+  color: #000;
+}
+video {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  background: url(polina.jpg) no-repeat;
+  background-size: cover;
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+}
+#bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+#bar_heading {
+  position: fixed;
+  top: 0;
+  left: 50%;
+}
+#bar_buttons {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+#footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+#footer_ending {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+#border-left {
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+#border-right {
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+#player {
+  width: 149px;
+  height: 235px;
+  padding: 0.5em;
+  background-image: url("../image/window.png");
+  background-size: contain;
+  image-rendering: -moz-crisp-edges;         /* Firefox */
+  image-rendering:   -o-crisp-edges;         /* Opera */
+  image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;  /* IE (non-standard property) */
+  margin-top: 20%;
+  margin-left: 20%;
+}
+#player_inside {
+  margin-top: 95px;
+  margin-left: 10px;
+}
+#icon {
+  position: fixed;
+  bottom: 40px;
+  left: 20px;
+}
+
+#player_icon:hover {
+  cursor: pointer;
+}
+
+span {
+  font-size: 9px;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 110px;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #c0c0c0;
+  border-radius: 0px;
+  border: 0px solid #010101;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  height: 25px;
+  width: 16px;
+  border-radius: 3px;
+  background: #c0c0c0;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -17px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #cdcdcd;
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #c0c0c0;
+  border-radius: 0px;
+  border: 0px solid #010101;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  height: 25px;
+  width: 10px;
+  border-radius: 3px;
+  background: #c0c0c0;
+  cursor: pointer;
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: #b3b3b3;
+  border: 0px solid #010101;
+  border-radius: 0px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-fill-upper {
+  background: #c0c0c0;
+  border: 0px solid #010101;
+  border-radius: 0px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  height: 25px;
+  width: 10px;
+  border-radius: 3px;
+  background: #c0c0c0;
+  cursor: pointer;
+  height: 2px;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #c0c0c0;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #cdcdcd;
+}
