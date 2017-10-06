@@ -2,9 +2,10 @@ package us.dangeru.radiu;
 
 import android.app.AlertDialog;
 import android.app.Application;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.media.MediaPlayer;
-
-import java.lang.ref.WeakReference;
+import android.support.v4.app.NotificationCompat;
 
 /**
  * Created by Niles on 6/10/17.
@@ -13,6 +14,10 @@ import java.lang.ref.WeakReference;
 public class radiu_application extends Application {
     public static MediaPlayer player = null;
     public static boolean playing = false;
+    public static NotificationCompat.Builder mBuilder = null;
+    public static int mNotificationId = 15;
+    public static NotificationManager mNotificationManager = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -25,5 +30,22 @@ public class radiu_application extends Application {
                 new AlertDialog.Builder(getApplicationContext()).setMessage(e.toString()).create().show();
             }
         }
+        mBuilder =
+                new NotificationCompat.Builder(getApplicationContext())
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("radi/u/ - NULL")
+                        .setContentText("NULL are listening.");
+
+        mNotificationManager =
+                (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mNotificationManager.notify(mNotificationId, mBuilder.build());
+
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        mNotificationManager.cancelAll();
     }
 }

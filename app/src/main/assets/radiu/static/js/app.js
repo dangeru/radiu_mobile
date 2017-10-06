@@ -6,8 +6,10 @@ $(document).ready(function () {
   setInterval(function () {radioTitle();}, 15000);
   $('#vol_slider').on("change", function() {
       console.log($(this).val());
-      document.getElementById('track').volume = $(this).val() / 100;
+      //document.getElementById('track').volume = $(this).val() / 100;
+      radiu.set_volume(($(this).val() / 100).toString());
   });
+  updatePlayerState();
 });
 function radioTitle() {
   // this is the URL of the json.xml file located on your server.
@@ -42,13 +44,18 @@ function togglePlayer() {
     document.getElementById("player").style.display = "none";
   }
 }
+function updatePlayerState() {
+  if (radiu.is_playing().toUpperCase() == "TRUE") {
+    document.getElementById('is-playing').innerHTML = "stop.exe";
+  } else {
+    document.getElementById('is-playing').innerHTML = "play.exe";
+  }
+}
 function switchPlayerState() {
   if (radiu.is_playing().toUpperCase() == "TRUE") {
-    document.getElementById('is-playing').innerHTML = "play.exe";
     radiu.pause_stream();
   } else {
-    audio.pause();
     radiu.play_stream();
-    document.getElementById('is-playing').innerHTML = "stop.exe";
   }
+  updatePlayerState()
 }

@@ -5,6 +5,10 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.support.v7.app.NotificationCompat;
 import android.webkit.JavascriptInterface;
+import android.widget.Toast;
+
+import static us.dangeru.radiu.radiu_application.mBuilder;
+import static us.dangeru.radiu.radiu_application.mNotificationId;
 
 /**
  * Created by prefetcher on 16.09.2017.
@@ -12,25 +16,10 @@ import android.webkit.JavascriptInterface;
 
 public class radiu_javascript {
     Context mContext;
-    NotificationCompat.Builder mBuilder;
-    int mNotificationId;
-    NotificationManager mNotificationManager;
 
     /** Instantiate the interface and set the context */
     radiu_javascript(Context c) {
         mContext = c;
-        mNotificationId = 15;
-
-        mBuilder =
-                (NotificationCompat.Builder) new NotificationCompat.Builder(c)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("radi/u/ - NULL")
-                        .setContentText("NULL are listening.");
-
-        mNotificationManager =
-                (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        mNotificationManager.notify(mNotificationId, mBuilder.build());
     }
 
     /*
@@ -42,7 +31,7 @@ public class radiu_javascript {
         mBuilder.setContentTitle("radi/u/ - " + title);
         mBuilder.setContentText(listeners + " are listening.");
 
-        mNotificationManager.notify(mNotificationId, mBuilder.build());
+        radiu_application.mNotificationManager.notify(mNotificationId, mBuilder.build());
     }
 
     /*
@@ -52,7 +41,7 @@ public class radiu_javascript {
     @JavascriptInterface
     public void play_stream() {
         radiu_application.player.start();
-        radiu_application.playing = false;
+        radiu_application.playing = true;
     }
 
     @JavascriptInterface
@@ -63,5 +52,9 @@ public class radiu_javascript {
     @JavascriptInterface
     public String is_playing() {
         return String.valueOf(radiu_application.playing);
+    }
+    @JavascriptInterface
+    public void set_volume(String new_volume) {
+        Toast.makeText(mContext, "TODO set volume to " + new_volume, Toast.LENGTH_LONG).show();
     }
 }
