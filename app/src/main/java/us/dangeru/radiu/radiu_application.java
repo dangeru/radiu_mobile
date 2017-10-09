@@ -24,7 +24,7 @@ public class radiu_application extends Application {
         super.onCreate();
         mBuilder =
                 new NotificationCompat.Builder(getApplicationContext())
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.drawable.bar_icon)
                         .setContentTitle("radi/u/ - NULL")
                         .setContentText("NULL are listening.");
 
