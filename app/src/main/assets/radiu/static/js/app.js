@@ -1,6 +1,9 @@
 var audio = new Audio('static/etc/calicomp_startup.mp3');
 $(document).ready(function () {
-  audio.play();
+  if(radiu.hasWelcomePlayed().toUpperCase != "TRUE") {
+    audio.play();
+    radiu.setWelcomePlayed(true);
+  }
   setTimeout(function () {radioTitle();}, 2000);
   // we're going to update our html elements / player every 15 seconds
   setInterval(function () {radioTitle();}, 15000);
@@ -11,6 +14,8 @@ $(document).ready(function () {
   });
   updatePlayerState();
 });
+
+
 function radioTitle() {
   // this is the URL of the json.xml file located on your server.
   var url = 'http://radio.dangeru.us:8000/json.xsl';
@@ -55,6 +60,7 @@ function switchPlayerState() {
   if (radiu.is_playing().toUpperCase() == "TRUE") {
     radiu.pause_stream();
   } else {
+    audio.stop();
     radiu.play_stream();
   }
   updatePlayerState()

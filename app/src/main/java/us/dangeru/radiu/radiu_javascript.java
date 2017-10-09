@@ -40,6 +40,7 @@ public class radiu_javascript {
      */
     @JavascriptInterface
     public void play_stream() {
+        radiu_application.preparePlayer(mContext);
         radiu_application.player.start();
         radiu_application.playing = true;
     }
@@ -53,8 +54,19 @@ public class radiu_javascript {
     public String is_playing() {
         return String.valueOf(radiu_application.playing);
     }
+
     @JavascriptInterface
     public void set_volume(String new_volume) {
         Toast.makeText(mContext, "TODO set volume to " + new_volume, Toast.LENGTH_LONG).show();
+    }
+
+    @JavascriptInterface
+    public String hasWelcomePlayed() {
+        return String.valueOf(radiu_application.hasStarted);
+    }
+
+    @JavascriptInterface
+    public void setWelcomePlayed(boolean value) {
+        radiu_application.hasStarted = value;
     }
 }
