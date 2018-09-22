@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -92,7 +93,10 @@ public class radiu_application extends Application {
                                 .setContentTitle("radi/u/ - NULL")
                                 .setOngoing(true)
                                 .setContentText("NULL are listening.");
-
+                Intent i = new Intent(getApplicationContext(), radiu_activity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
+                mBuilder.setContentIntent(pi);
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     NotificationChannel notificationChannel = null;
                     if (mNotificationManager != null) {
