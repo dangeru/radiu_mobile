@@ -37,7 +37,7 @@ var radioTitle = function radioTitle() {
           radiu.update_notif(json[mountpoint].title, json[mountpoint].listeners);
         },
         error: function (e) {
-          console.log(e.message);
+          //console.log(e.message);
         }
   });
 }
@@ -60,7 +60,7 @@ function switchPlayerState() {
   if (radiu.is_playing().toUpperCase() == "TRUE") {
     radiu.pause_stream();
   } else {
-    audio.stop();
+    audio.pause();
     radiu.play_stream();
   }
   updatePlayerState()

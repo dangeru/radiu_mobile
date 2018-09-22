@@ -1,6 +1,7 @@
 package us.dangeru.radiu;
 
 import android.content.Context;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 
 import static us.dangeru.radiu.radiu_application.mBuilder;
@@ -22,6 +23,8 @@ public class radiu_javascript {
      * A reference to the current number of listeners, so we don't update more than necessary
      */
     private String old_listeners = "";
+
+    private static final String TAG = radiu_javascript.class.getSimpleName();
     /**
      * Instantiate the interface and set the context
      * @param c The context to save
@@ -58,8 +61,9 @@ public class radiu_javascript {
      */
     @JavascriptInterface
     public void play_stream() {
+        Log.i(TAG, "play_stream");
         radiu_application.preparePlayer(mContext);
-        radiu_application.player.start();
+        //radiu_application.player.start();
         radiu_application.playing = true;
     }
 
@@ -68,6 +72,7 @@ public class radiu_javascript {
      */
     @JavascriptInterface
     public static void pause_stream() {
+        Log.i(TAG, "pause_stream");
         radiu_application.player.stop();
         radiu_application.playing = false;
     }
