@@ -4,9 +4,9 @@ $(document).ready(function () {
     audio.play();
     radiu.setWelcomePlayed(true);
   }
-  setTimeout(function () {radioTitle();}, 2000);
+  setInterval(radioTitle, 2000); // DEBUG
   // we're going to update our html elements / player every 15 seconds
-  setInterval(function () {radioTitle();}, 15000);
+  setInterval(radioTitle, 15000);
   $('#vol_slider').on("change", function() {
       console.log($(this).val());
       //document.getElementById('track').volume = $(this).val() / 100;
@@ -16,7 +16,7 @@ $(document).ready(function () {
 });
 
 
-function radioTitle() {
+var radioTitle = function radioTitle() {
   // this is the URL of the json.xml file located on your server.
   var url = 'http://radio.dangeru.us:8000/json.xsl';
   // this is your mountpoint's name, mine is called /radio

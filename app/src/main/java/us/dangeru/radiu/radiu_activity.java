@@ -1,15 +1,20 @@
 package us.dangeru.radiu;
 
+import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+/**
+ * The activity that holds the web view
+ */
 public class radiu_activity extends AppCompatActivity {
     public WebView getWebView() {
         return (WebView) findViewById(R.id.radiuView);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -19,6 +19,23 @@ public class radiu_application extends Application {
     public static int mNotificationId = 15;
     public static NotificationManager mNotificationManager = null;
 
+    public static void preparePlayer(Context mContext) {
+        if (player == null) {
+            player = new MediaPlayer();
+            try {
+                player.setDataSource("http://radio.dangeru.us:8000/stream.ogg");
+                player.prepare();
+            } catch (Exception e) {
+                new AlertDialog.Builder(mContext).setMessage(e.toString()).create().show();
+            }
+        }
+    }
+
+    public static void setVolume(float volume) {
+        if (player == null) return;
+        player.setVolume(volume, volume);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -33,18 +50,6 @@ public class radiu_application extends Application {
 
         mNotificationManager.notify(mNotificationId, mBuilder.build());
 
-    }
-
-    public static void preparePlayer(Context mContext) {
-        if (player == null) {
-            player = new MediaPlayer();
-            try {
-                player.setDataSource("http://radio.dangeru.us:8000/stream.ogg");
-                player.prepare();
-            } catch (Exception e) {
-                new AlertDialog.Builder(mContext).setMessage(e.toString()).create().show();
-            }
-        }
     }
 
     @Override

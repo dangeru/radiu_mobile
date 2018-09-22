@@ -1,42 +1,60 @@
 package us.dangeru.radiu;
 
-import android.app.NotificationManager;
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.support.v7.app.NotificationCompat;
 import android.webkit.JavascriptInterface;
-import android.widget.Toast;
 
 import static us.dangeru.radiu.radiu_application.mBuilder;
 import static us.dangeru.radiu.radiu_application.mNotificationId;
 
 /**
- * Created by prefetcher on 16.09.2017.
+ * The javascript interface that app.js will use to control the audio and notifiations
  */
-
 public class radiu_javascript {
-    Context mContext;
-
-    /** Instantiate the interface and set the context */
+    /**
+     * A reference for an activity context that can be used to show alerts
+     */
+    private Context mContext;
+    /**
+     * A reference to the current title, so we don't update more than necessary
+     */
+    private String old_title = "";
+    /**
+     * A reference to the current number of listeners, so we don't update more than necessary
+     */
+    private String old_listeners = "";
+    /**
+     * Instantiate the interface and set the context
+     * @param c The context to save
+     */
     radiu_javascript(Context c) {
         mContext = c;
     }
 
-    /*
-        Updates the notification with the new data about listeners and the currently played track.
-        Refreshes every 15 seconds.
+    /**
+     * Updates the native notification if it has changed
+     * @param title the song currently playing
+     * @param listeners the number of current listeners
      */
+    @SuppressWarnings("EqualsReplaceableByObjectsCall")
     @JavascriptInterface
     public void update_notif(String title, String listeners){
-        mBuilder.setContentTitle("radi/u/ - " + title);
-        mBuilder.setContentText(listeners + " are listening.");
-
+        if (title.equals(old_title) && listeners.equals(old_listeners)) {
+            return;
+        }
+        if ("1".equals(listeners)) {
+            mBuilder.setContentTitle(title);
+            mBuilder.setContentText("radi/u/");
+        } else {
+            mBuilder.setContentTitle("radi/u/ - " + title);
+            mBuilder.setContentText(listeners + " are listening.");
+        }
         radiu_application.mNotificationManager.notify(mNotificationId, mBuilder.build());
+        old_title = title;
+        old_listeners = listeners;
     }
 
-    /*
-        MediaPlayer integration.
-        Added that because @Lain was complaining about me using <audio> in WebView.
+    /**
+     * Starts the music
      */
     @JavascriptInterface
     public void play_stream() {
@@ -45,28 +63,48 @@ public class radiu_javascript {
         radiu_application.playing = true;
     }
 
+    /**
+     * Pauses the stream
+     */
     @JavascriptInterface
-    public void pause_stream() {
+    public static void pause_stream() {
         radiu_application.player.stop();
         radiu_application.playing = false;
     }
+
+    /**
+     * Gets the current state of the player
+     * @return whether or not the stream is playing
+     */
     @JavascriptInterface
-    public String is_playing() {
+    public static String is_playing() {
         return String.valueOf(radiu_application.playing);
     }
 
+    /**
+     * Sets the volume of the stream
+     * @param new_volume the new volume, a float between 0.0 and 1.0
+     */
     @JavascriptInterface
-    public void set_volume(String new_volume) {
-        Toast.makeText(mContext, "TODO set volume to " + new_volume, Toast.LENGTH_LONG).show();
+    public static void set_volume(String new_volume) {
+        radiu_application.setVolume(Float.valueOf(new_volume));
     }
 
+    /**
+     * Gets whether the startup sound has played or not
+     * @return whether the startup sound has played or not
+     */
     @JavascriptInterface
-    public String hasWelcomePlayed() {
+    public static String hasWelcomePlayed() {
         return String.valueOf(radiu_application.hasStarted);
     }
 
+    /**
+     * Notifies the application that the startup sound has played
+     * @param value true if the startup sound has played
+     */
     @JavascriptInterface
-    public void setWelcomePlayed(boolean value) {
+    public static void setWelcomePlayed(boolean value) {
         radiu_application.hasStarted = value;
     }
 }
