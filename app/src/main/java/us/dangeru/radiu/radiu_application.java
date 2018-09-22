@@ -1,53 +1,69 @@
 package us.dangeru.radiu;
 
-import android.app.AlertDialog;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 /**
  * Created by Niles on 6/10/17.
  */
 
 public class radiu_application extends Application {
+    public static final int mNotificationId = 15;
     private static final String TAG = radiu_application.class.getSimpleName();
-    public static MediaPlayer player = null;
+    public static DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+    public static TrackSelection.Factory videoTrackSelectionFactory =
+            new AdaptiveTrackSelection.Factory(bandwidthMeter);
+    public static DefaultTrackSelector trackSelector =
+            new DefaultTrackSelector(videoTrackSelectionFactory);
+    public static SimpleExoPlayer player = null;
     public static boolean playing = false;
     public static boolean hasStarted = false;
     public static NotificationManager mNotificationManager = null;
-    public static final int mNotificationId = 15;
     public static NotificationCompat.Builder mBuilder = null;
 
     public static void preparePlayer(Context mContext) {
         Log.i(TAG, "preparePlayer");
-        if (player == null) {
-            player = new MediaPlayer();
-            try {
-                player.setDataSource("http://radio.dangeru.us:8000/stream.ogg");
-                //player.prepare();
-                player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        Log.i(TAG, "Prepared - starting.");
-                        mp.start();
-                    }
-                });
-                player.prepareAsync();
-            } catch (Exception e) {
-                e.printStackTrace();
-                new AlertDialog.Builder(mContext).setMessage(e.toString()).create().show();
-            }
+        if (player != null) {
+            player.stop();
         }
+        LoadControl loadControl = new DefaultLoadControl();
+        player = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
+
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext, Util.getUserAgent(mContext, "radi/u/"), bandwidthMeter);
+
+        ExtractorsFactory extractorsFactory= new DefaultExtractorsFactory();
+
+        MediaSource mediaSource = new ExtractorMediaSource(Uri.parse("http://radio.dangeru.us:8000/stream.ogg"), dataSourceFactory, extractorsFactory, null, null);
+        player.setPlayWhenReady(true);
+        Log.i(TAG, "preparing");
+        player.prepare(mediaSource);
+        Log.i(TAG, "prepared");
     }
 
     public static void setVolume(float volume) {
         if (player == null) return;
-        player.setVolume(volume, volume);
+        player.setVolume(volume);
     }
 
     @Override
