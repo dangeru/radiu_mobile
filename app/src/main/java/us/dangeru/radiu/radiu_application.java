@@ -1,10 +1,16 @@
 package us.dangeru.radiu;
 
+import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -43,7 +49,6 @@ public class radiu_application extends Application {
     public static NotificationCompat.Builder mBuilder = null;
 
     public static void preparePlayer(Context mContext) {
-        Log.i(TAG, "preparePlayer");
         if (player != null) {
             player.stop();
         }
@@ -52,13 +57,11 @@ public class radiu_application extends Application {
 
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext, Util.getUserAgent(mContext, "radi/u/"), bandwidthMeter);
 
-        ExtractorsFactory extractorsFactory= new DefaultExtractorsFactory();
+        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
 
         MediaSource mediaSource = new ExtractorMediaSource(Uri.parse("http://radio.dangeru.us:8000/stream.ogg"), dataSourceFactory, extractorsFactory, null, null);
         player.setPlayWhenReady(true);
-        Log.i(TAG, "preparing");
         player.prepare(mediaSource);
-        Log.i(TAG, "prepared");
     }
 
     public static void setVolume(float volume) {
@@ -72,39 +75,88 @@ public class radiu_application extends Application {
 
         mNotificationManager =
                 (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
-
         final String channelId = "radiu";
         final String channelDescription = "radi/u/";
-        mBuilder =
-                new NotificationCompat.Builder(getApplicationContext(), channelId)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("radi/u/ - NULL")
-                        .setOngoing(true)
-                        .setContentText("NULL are listening.");
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = null;
-            if (mNotificationManager != null) {
-                notificationChannel = mNotificationManager.getNotificationChannel(channelId);
+
+        ServiceConnection mConnection = new ServiceConnection() {
+            public void onServiceConnected(ComponentName className,
+                                           IBinder binder) {
+
+                ((radiu_service.KillBinder) binder).service.startService(new Intent(
+                        getApplicationContext(), radiu_service.class));
+
+
+                mBuilder =
+                        new NotificationCompat.Builder(getApplicationContext(), channelId)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("radi/u/ - NULL")
+                                .setOngoing(true)
+                                .setContentText("NULL are listening.");
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    NotificationChannel notificationChannel = null;
+                    if (mNotificationManager != null) {
+                        notificationChannel = mNotificationManager.getNotificationChannel(channelId);
+                    }
+                    if (notificationChannel == null) {
+                        int importance = NotificationManager.IMPORTANCE_LOW; //Set the importance level
+                        notificationChannel = new NotificationChannel(channelId, channelDescription, importance);
+                        //notificationChannel.setLightColor(Color.GREEN); //Set if it is necesssary
+                        notificationChannel.enableVibration(false);
+                        mNotificationManager.createNotificationChannel(notificationChannel);
+                    }
+                    mBuilder.setChannelId(channelId);
+                }
+
+                mNotificationManager.notify(mNotificationId, mBuilder.build());
             }
-            if (notificationChannel == null) {
-                int importance = NotificationManager.IMPORTANCE_LOW; //Set the importance level
-                notificationChannel = new NotificationChannel(channelId, channelDescription, importance);
-                //notificationChannel.setLightColor(Color.GREEN); //Set if it is necesssary
-                notificationChannel.enableVibration(false);
-                mNotificationManager.createNotificationChannel(notificationChannel);
+
+            public void onServiceDisconnected(ComponentName className) {
             }
-            mBuilder.setChannelId(channelId);
-        }
 
-        mNotificationManager.notify(mNotificationId, mBuilder.build());
+        };
+        bindService(new Intent(getApplicationContext(),
+                        radiu_service.class), mConnection,
+                Context.BIND_AUTO_CREATE);
 
-    }
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle bundle) {
 
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        mNotificationManager.cancelAll();
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                NotificationManager mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                if (mNM == null) return;
+                mNM.cancelAll();
+            }
+        });
     }
 }
